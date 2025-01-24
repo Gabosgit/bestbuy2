@@ -23,7 +23,6 @@ class Product:
         except TypeError:
             print("Type value is invalid")
 
-
     def get_quantity(self):
         """ Return the quantity of a product """
         return self.quantity
@@ -75,7 +74,53 @@ class Product:
             return total_price
 
 
-# TEST: Product deactivate by buy/Quantity
+class NonStockedProduct(Product):
+    def __init__(self, name, price):
+        super().__init__(name, price, quantity=0)
+        #self.quantity = 0
+
+    def buy(self, buy_quantity):
+        total_price = self.price * buy_quantity
+        return total_price
+
+    def show(self):
+        """ Returns a string with information about the attributes of a product """
+        return f"{self.name}, Price: {self.price}"
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
+
+    def buy(self, buy_quantity):
+        super().buy(buy_quantity)
+        try:
+            if buy_quantity > self.maximum:
+                raise Exception(f"The max Quantity to order is {self.maximum}")
+        except Exception as e:
+            print(e)
+            buy_quantity = input("Enter a valid quantity: ")
+        else:
+            total_price = self.price * buy_quantity
+            return total_price
+
+    def show(self):
+        """ Returns a string with information about the attributes of a product """
+        return f"{self.name}, Price: {self.price}, max-Quantity: {self.maximum}"
+
+
+# # TEST - Buy a LimitedProduct
+#my_LimitedProduct = LimitedProduct('my_LimitedProduct', 120, 120, 1)
+#print(my_LimitedProduct.show())
+#my_LimitedProduct.buy(1)
+
+# # TEST - Buy a NonStockedProduct without Stock Quantity
+# my_NonStockedProduct = NonStockedProduct('NonStockedProduct', 120)
+# print(my_NonStockedProduct.show())
+# print(my_NonStockedProduct.buy(2))
+
+# # TEST: - Product deactivate by buy/Quantity
 # my_pr = Product('my_pr', 100, 100)
 # print(my_pr.show())
 # print(my_pr.is_active())

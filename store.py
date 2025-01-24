@@ -3,7 +3,6 @@
 """
 
 import products
-from products import Product
 
 
 class Store:
@@ -18,15 +17,16 @@ class Store:
             self.products_list = products_list
 
 
-    def add_product(self, product):
+    def add_product(self, prod):
         """ Allows to add a product to the product list """
         try:
-            if type(product) != products.Product:
+            if not isinstance(prod, products.Product):
                 raise Exception("The product have to be created as a class Product from products.py")
         except Exception as error:
             print(error)
+            return
         else:
-            self.products_list.append(product)
+            self.products_list.append(prod)
 
 
     def remove_product(self, product):
@@ -81,11 +81,21 @@ def main():
     """
     pass
 
-mystr = Store([])
-my_product = Product('new_product', 100, 100)
-mystr.add_product(my_product)
-mystr
+# TEST
+# my_store = Store([])
+# my_product = Product('new_product', 100, 100)
+# my_store.add_product(my_product)
+#
+# my_limited_product = products.LimitedProduct('new_limited_prod', 99, 100, 1)
+# my_store.add_product(my_limited_product)
+#
 
+#TEST - Buy a NonStockedProduct
+# my_NonStockedProduct = products.NonStockedProduct('new_limited_prod', 50)
+# my_store = Store([])
+# my_store.add_product(my_NonStockedProduct)
+# my_store.get_all_products()
+# print(my_NonStockedProduct.buy(2))
 
 if __name__ == '__main__':
     main()

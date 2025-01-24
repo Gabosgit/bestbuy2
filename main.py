@@ -56,14 +56,14 @@ def print_menu():
           "4. Quit")
 
 
-def order_menu(best_buy):
+def order_menu(store_name):
     """ Print the list of products and manage the order. """
     order_list = []
     print("------")
-    best_buy.get_all_products()
+    store_name.get_all_products()
     print("------")
     while True:
-        products_list_length = len(best_buy.products_list)
+        products_list_length = len(store_name.products_list)
         print("When you want to finish order, enter empty text.")
 
         input_order_product = str(input_int("Which product # do you want? ", products_list_length))
@@ -74,14 +74,28 @@ def order_menu(best_buy):
             print(f"Order made! Total payment: {store.order(order_list)}\n")
             break
         else:
-            get_product_from_list = best_buy.products_list[int(input_order_product) - 1]
-            get_product_quantity = get_product_from_list.quantity
-            if get_product_quantity < int(input_order_quantity):
-                print("\nError while making order! Quantity larger than what exists\n")
-                break
-            else:
+            get_product_from_list = store_name.products_list[int(input_order_product) - 1]
+            if type(get_product_from_list) == products.NonStockedProduct:
                 order_list.append((get_product_from_list, int(input_order_quantity)))
                 print("\nProduct added to list!\n")
+            else:
+                get_product_quantity = get_product_from_list.quantity
+                if type(get_product_from_list) == products.LimitedProduct:
+                    try:
+                        if get_product_from_list.maximum < input_order_quantity:
+                            raise Exception(f"\nError while making order! Only {get_product_from_list.maximum} is allowed from this product!\n")
+                    except Exception as e:
+                        print(e)
+                    else:
+                        order_list.append((get_product_from_list, int(input_order_quantity)))
+                        print("\nProduct added to list!\n")
+                else:
+                    if get_product_quantity < int(input_order_quantity):
+                        print("\nError while making order! Quantity larger than what exists\n")
+                        break
+                    else:
+                        order_list.append((get_product_from_list, int(input_order_quantity)))
+                        print("\nProduct added to list!\n")
 
 
 def start(best_buy):
@@ -110,11 +124,12 @@ def main():
     # setup initial stock of inventory
     product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
                     products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                    products.Product("Google Pixel 7", price=500, quantity=250)
+                    products.Product("Google Pixel 7", price=500, quantity=250),
+                    products.NonStockedProduct("Windows License", price=125),
+                    products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
                     ]
     best_buy = store.Store(product_list)
     start(best_buy)
-
 
 if __name__ == '__main__':
     main()

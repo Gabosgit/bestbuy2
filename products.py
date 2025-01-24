@@ -2,9 +2,11 @@
     It allows to calculate the total price for a given quantity of the product.
 """
 
+
 class Product:
     """ Allows you to create product instances with their own attributes """
     def __init__(self, name, price, quantity):
+        self.promo_name = None
         try:
             self.name = name
             self.price = price
@@ -50,10 +52,6 @@ class Product:
         """ Deactivate the product """
         self.active = False
 
-    def show(self):
-        """ Returns a string with information about the attributes of a product """
-        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
-
     def buy(self, buy_quantity):
         """ Returns the total price for a given quantity of a product
             Validates the given quantity, which has to be a positive number.
@@ -73,6 +71,15 @@ class Product:
         else:
             return total_price
 
+    def set_promotion(self, promo_name):
+        """ Sets a promotion to the product by promo name """
+        self.promo_name = promo_name
+        return self.promo_name
+
+    def __str__(self):
+        """ Returns a string with information about the attributes of a product """
+        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+
 
 class NonStockedProduct(Product):
     def __init__(self, name, price):
@@ -83,7 +90,7 @@ class NonStockedProduct(Product):
         total_price = self.price * buy_quantity
         return total_price
 
-    def show(self):
+    def __str__(self):
         """ Returns a string with information about the attributes of a product """
         return f"{self.name}, Price: {self.price}"
 
@@ -105,7 +112,7 @@ class LimitedProduct(Product):
             total_price = self.price * buy_quantity
             return total_price
 
-    def show(self):
+    def __str__(self):
         """ Returns a string with information about the attributes of a product """
         return f"{self.name}, Price: {self.price}, max-Quantity: {self.maximum}"
 

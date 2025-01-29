@@ -147,7 +147,7 @@ class LimitedProduct(Product):
 #
 # # Buy products
 # print(new_pro.buy(200))
-#
+
 # # Create a NonStockedProduct
 # new_NonStockedProduct = NonStockedProduct('new_NonStockedProduct', 100)
 

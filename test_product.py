@@ -3,7 +3,8 @@ import products
 
 # Create a normal product
 def test_create_prod():
-    products.Product("my_prod", price=100, quantity=100)
+    test_product = products.Product("my_prod", price=100, quantity=100)
+    assert type(test_product) == products.Product
 
 # Empty name
 def test_empty_name():

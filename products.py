@@ -2,11 +2,13 @@
     It allows to calculate the total price for a given quantity of the product.
 """
 
+import promotions
+
 
 class Product:
     """ Allows you to create product instances with their own attributes """
     def __init__(self, name, price, quantity):
-        self.promo_name = None
+        self.promotion = None
         try:
             self.name = name
             self.price = price
@@ -52,6 +54,23 @@ class Product:
         """ Deactivate the product """
         self.active = False
 
+    def get_price_by_promotion(self, buy_quantity):
+        # Update final price by promotion
+        if type(self.promotion) == promotions.PercentDiscount:
+            final_price = self.promotion.apply_promotion(self, buy_quantity)
+            return final_price
+
+        if type(self.promotion) == promotions.ThirdOneFree:
+            final_price = self.promotion.apply_promotion(self, buy_quantity)
+            return final_price
+
+        if type(self.promotion) == promotions.SecondHalfPrice:
+            final_price = self.promotion.apply_promotion(self, buy_quantity)
+            return final_price
+
+        final_price = self.price * buy_quantity
+        return final_price
+
     def buy(self, buy_quantity):
         """ Returns the total price for a given quantity of a product
             Validates the given quantity, which has to be a positive number.
@@ -59,22 +78,26 @@ class Product:
         """
         try:
             if buy_quantity > self.quantity:
-                print("Error while making order! Quantity larger than what exists")
-                #raise Exception("Not enough Quantity in stock")
+                #print("Error while making order! Quantity larger than what exists")
+                raise Exception("Error while making order! Quantity larger than what exists")
             if buy_quantity < 1:
                 raise Exception("Quantity must be a positive number and at least 1")
-            total_price = self.price * buy_quantity
+        except TypeError:
+            return "buy_quantity have to be an integer."
+        else:
+            # Update Quantity
             self.quantity -= buy_quantity
             self.set_quantity(self.quantity)
-        except TypeError:
-            print("buy_quantity have to be an integer.")
-        else:
-            return total_price
+            # Update final price by promotion
+            final_price = self.get_price_by_promotion(buy_quantity)
+            return final_price
 
-    def set_promotion(self, promo_name):
+    def get_promotion(self):
+        return self.promotion
+
+    def set_promotion(self, promo):
         """ Sets a promotion to the product by promo name """
-        self.promo_name = promo_name
-        return self.promo_name
+        self.promotion = promo
 
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
@@ -84,11 +107,12 @@ class Product:
 class NonStockedProduct(Product):
     def __init__(self, name, price):
         super().__init__(name, price, quantity=0)
-        #self.quantity = 0
+        self.quantity = 0
 
     def buy(self, buy_quantity):
-        total_price = self.price * buy_quantity
-        return total_price
+        # Update final price by promotion
+        final_price = self.get_price_by_promotion(buy_quantity)
+        return final_price
 
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
@@ -109,28 +133,36 @@ class LimitedProduct(Product):
             print(e)
             buy_quantity = input("Enter a valid quantity: ")
         else:
-            total_price = self.price * buy_quantity
-            return total_price
+            # Update final price by promotion
+            final_price = self.get_price_by_promotion(buy_quantity)
+            return final_price
 
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
-        return f"{self.name}, Price: {self.price}, max-Quantity: {self.maximum}"
+        return f"{self.name}, Price: {self.price}, Limited to {self.maximum} per order!"
 
 
-# # TEST - Buy a LimitedProduct
-#my_LimitedProduct = LimitedProduct('my_LimitedProduct', 120, 120, 1)
-#print(my_LimitedProduct.show())
-#my_LimitedProduct.buy(1)
+# # Create product
+# new_pro = Product("prod_with_promo", 100, 100)
+#
+# # Buy products
+# print(new_pro.buy(200))
+#
+# # Create a NonStockedProduct
+# new_NonStockedProduct = NonStockedProduct('new_NonStockedProduct', 100)
 
-# # TEST - Buy a NonStockedProduct without Stock Quantity
-# my_NonStockedProduct = NonStockedProduct('NonStockedProduct', 120)
-# print(my_NonStockedProduct.show())
-# print(my_NonStockedProduct.buy(2))
+# Create promotion
+# new_promo_percent_discount = promotions.PercentDiscount('30 % OFF', 30)
+# new_promo_ThirdOneFree = promotions.ThirdOneFree('3ht free')
+# new_promo_SecondHalfPrice = promotions.SecondHalfPrice('MY Second Halp Price!')
+#
+# Set promotion to products
+#new_pro.set_promotion(new_promo_SecondHalfPrice)
+# new_NonStockedProduct.set_promotion(new_promo_ThirdOneFree)
+#
 
-# # TEST: - Product deactivate by buy/Quantity
-# my_pr = Product('my_pr', 100, 100)
-# print(my_pr.show())
-# print(my_pr.is_active())
-# my_pr.buy(100)
-# print(my_pr.show())
-# print(my_pr.is_active())
+
+# GET QUANTITY
+#print(prod_with_promo.get_quantity())
+#print(new_NonStockedProduct.buy(1))
+

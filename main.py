@@ -38,7 +38,8 @@ def input_numeric(prompt):
                 break
             if not input_user.isnumeric():
                 raise Exception("Expected a positive number")
-
+            if int(input_user) < 1:
+                raise Exception("Expected a positive number")
         except ValueError:
             print("Expected a positive number")
         except Exception as error:
@@ -68,7 +69,7 @@ def order_menu(store_name):
         print("When you want to finish order, enter empty text.")
 
         input_order_product = str(input_int("Which product # do you want? ", products_list_length))
-        input_order_quantity = input_numeric("What amount do you want?")
+        input_order_quantity = input_numeric("What amount do you want? ")
 
         if input_order_quantity == "" or input_order_product == "":
             print()
@@ -97,6 +98,7 @@ def order_menu(store_name):
                     else:
                         order_list.append((get_product_from_list, int(input_order_quantity)))
                         print("\nProduct added to list!\n")
+
 
 
 def start(best_buy):
@@ -140,10 +142,11 @@ def main():
     product_list[3].set_promotion(thirty_percent)
 
 
-
     # Running the store
     best_buy = store.Store(product_list)
     start(best_buy)
+
+
 
 if __name__ == '__main__':
     main()

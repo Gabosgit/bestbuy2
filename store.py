@@ -3,6 +3,7 @@
 """
 
 import products
+import promotions
 
 
 class Store:
@@ -58,7 +59,8 @@ class Store:
             if not product.is_active():
                 self.remove_product(product)
             elif product.is_active():
-                print(f"{index+1}. {product.show()}")
+                promo = product.promotion
+                print(f"{index+1}. {product}. Promotion: {promo}")
         print()
 
 
@@ -83,12 +85,17 @@ def main():
 
 # TEST
 # my_store = Store([])
-# my_product = Product('new_product', 100, 100)
+# my_product = products.Product('new_product', 100, 100)
 # my_store.add_product(my_product)
 #
 # my_limited_product = products.LimitedProduct('new_limited_prod', 99, 100, 1)
 # my_store.add_product(my_limited_product)
-#
+# #create a promotion
+# thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
+# #Set promotion
+# my_limited_product.set_promotion(thirty_percent)
+# #print(my_limited_product.promo_name)
+
 
 #TEST - Buy a NonStockedProduct
 # my_NonStockedProduct = products.NonStockedProduct('new_limited_prod', 50)

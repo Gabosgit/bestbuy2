@@ -1,9 +1,7 @@
 """
     This module manages the list of products in the store.
 """
-
 import products
-import promotions
 
 
 class Store:
@@ -83,7 +81,7 @@ def main():
     """
     pass
 
-# TEST
+# # # TEST
 # my_store = Store([])
 # my_product = products.Product('new_product', 100, 100)
 # my_store.add_product(my_product)
@@ -93,8 +91,8 @@ def main():
 # #create a promotion
 # thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
 # #Set promotion
-# my_limited_product.set_promotion(thirty_percent)
-# #print(my_limited_product.promo_name)
+# my_limited_product.promotion = thirty_percent
+# print(my_limited_product.promotion)
 
 
 #TEST - Buy a NonStockedProduct

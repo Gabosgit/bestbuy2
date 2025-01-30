@@ -19,14 +19,14 @@ def test_negative_price():
 # Product is inactive
 def test_prod_inactive():
     my_prod = products.Product("MacBook Air M2", price=10, quantity=10)
-    my_prod.set_quantity(0)
+    my_prod.quantity = 0
     assert my_prod.is_active() == False
 
 # Test that product purchase modifies the quantity and returns the right output.
 def test_update_quantity():
     my_prod = products.Product("MacBook Air M2", price=10, quantity=10)
     my_prod.buy(5)
-    assert my_prod.get_quantity() == 5
+    assert my_prod.quantity == 5
 
 # Test that buying a larger quantity than exists invokes exception.
 def test_buying_larger_quantity():

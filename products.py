@@ -8,7 +8,7 @@ import promotions
 class Product:
     """ Allows you to create product instances with their own attributes """
     def __init__(self, name, price, quantity):
-        self.promotion = None
+        self._promotion = None
         try:
             self.name = name
             self.price = price
@@ -35,13 +35,13 @@ class Product:
     @quantity.setter
     def quantity(self, quantity):
         """ Sets the available quantity of a product
-                    If the Quantity is 0, it deactivates the product
-                """
+            If the Quantity is 0, it deactivates the product
+        """
         try:
             self._quantity = int(quantity)
         except ValueError:
             print("Quantity have to be an integer")
-        if quantity == 0:
+        if self._quantity == 0:
             self.deactivate()
 
     def is_active(self):
@@ -57,7 +57,7 @@ class Product:
         self.active = False
 
     def get_price_by_promotion(self, buy_quantity):
-        # Update final price by promotion
+        """ Update the final price according to the promotion applied. """
         if type(self.promotion) == promotions.PercentDiscount:
             final_price = self.promotion.apply_promotion(self, buy_quantity)
             return final_price
@@ -93,12 +93,15 @@ class Product:
             final_price = self.get_price_by_promotion(buy_quantity)
             return final_price
 
-    def get_promotion(self):
-        return self.promotion
+    @property
+    def promotion(self):
+        """ Return the applied promotion of a product """
+        return self._promotion
 
-    def set_promotion(self, promo):
+    @promotion.setter
+    def promotion(self, promo):
         """ Sets a promotion to the product by promo name """
-        self.promotion = promo
+        self._promotion = promo
 
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
@@ -108,7 +111,6 @@ class Product:
 class NonStockedProduct(Product):
     def __init__(self, name, price):
         super().__init__(name, price, quantity=0)
-        self.quantity = 0
 
     def buy(self, buy_quantity):
         # Update final price by promotion
@@ -144,7 +146,7 @@ class LimitedProduct(Product):
 
 
 # # Create product
-new_pro = Product("prod_with_promo", 100, 100)
+#new_pro = Product("prod_with_promo", 100, 100)
 #new_pro.quantity = 200
 #print(new_pro.quantity)
 

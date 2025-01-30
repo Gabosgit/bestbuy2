@@ -3,8 +3,6 @@
     The imported "store" module contains the class to be able to manage the orders.
     The imported "products" module contains a class to manage product attributes.
 """
-from itertools import product
-
 import products
 import store
 import promotions

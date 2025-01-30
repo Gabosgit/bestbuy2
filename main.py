@@ -3,6 +3,8 @@
     The imported "store" module contains the class to be able to manage the orders.
     The imported "products" module contains a class to manage product attributes.
 """
+from itertools import product
+
 import products
 import store
 import promotions
@@ -48,16 +50,6 @@ def input_numeric(prompt):
             return int(input_user)
 
 
-def print_menu():
-    """ Prints the menu options """
-    print("\tStore Menu\n"
-          "\t----------")
-    print("1. List all products in store\n"
-          "2. Show total amount in store\n"
-          "3. Make an order\n"
-          "4. Quit")
-
-
 def order_menu(store_name):
     """ Print the list of products and manage the order. """
     order_list = []
@@ -100,24 +92,55 @@ def order_menu(store_name):
                         print("\nProduct added to list!\n")
 
 
+def compare_prices(store_name):
+    store_name.get_all_products()
+    length_list = len(store_name.products_list)
+    input_prod_a = input_int("Enter the number of product A to compare: ", length_list)
+    input_prod_b = input_int("Enter the number of product B to compare: ", length_list)
+    product_a = store_name.products_list[input_prod_a]
+    product_b = store_name.products_list[input_prod_b]
+    if product_a < product_b:
+        print(f"\nThe price of {product_a.name} ({product_a.price}) is lower that the price of {product_b.name} ({product_b.price})\n")
+    else:
+        print(f"\nThe price of {product_b.name} ({product_b.price}) is lower that the price of {product_a.name} ({product_a.price})\n")
+
+
+
+
+
+def print_menu():
+    """ Prints the menu options """
+    print("\tStore Menu\n"
+          "\t----------")
+    print("1. List all products in store\n"
+          "2. Show total amount in store\n"
+          "3. Make an order\n"
+          "4. Compare product prices\n"
+          "5. Check product availability\n"
+          "6. Quit")
+
 
 def start(best_buy):
     """ Controls the menu by allowing the user to select a menu option. """
     options_menu = {
         '1': best_buy.get_all_products,
         '2': best_buy.get_total_quantity,
-        '3': order_menu
+        '3': order_menu,
+        '4': compare_prices,
+        '5': product_availability
     }
     while True:
         print_menu()
-        input_menu_option = input_int("Select a number from the menu (1-4):", len(options_menu)+1)
+        input_menu_option = input_int(f"Select a number from the menu (1-{len(options_menu)+1}):", len(options_menu)+1)
         if input_menu_option == "":
             print(f"\nExpected a positive number (1-{len(options_menu) + 1})\n")
-        elif input_menu_option == 4:  # 4 exit the app
+        elif input_menu_option == len(options_menu)+1:  # 4 exit the app
             print("\n Bye Bye! ")
             break
         elif input_menu_option == 3:
             order_menu(best_buy)
+        elif input_menu_option == 4:
+            compare_prices(best_buy)
         else:
             options_menu[str(input_menu_option)]()
 

@@ -107,6 +107,20 @@ class Product:
         """ Returns a string with information about the attributes of a product """
         return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
 
+    def __lt__(self, other):
+        return self.price < other.price
+        # if result:
+        #     return f"\nThe price of {self.name} ({self.price}) is lower that the price of {other.name} ({other.price})\n"
+        # else:
+        #     return f"\nThe price of {other.name} ({other.price}) is lower that the price of {self.name} ({self.price})\n"
+
+    def __gt__(self, other):
+        return self.price > other.price
+        # if result:
+        #     return f"\nThe price of {self.name} ({self.price}) is lower that the price of {other.name} ({other.price})\n"
+        # else:
+        #     return f"\nThe price of {other.name} ({other.price}) is lower that the price of {self.name} ({self.price})\n"
+
 
 class NonStockedProduct(Product):
     def __init__(self, name, price):
@@ -146,17 +160,24 @@ class LimitedProduct(Product):
 
 
 # # Create product
-#new_pro = Product("prod_with_promo", 100, 100)
+new_pro = Product("prod_with_promo", 100, 100)
 #new_pro.quantity = 200
 #print(new_pro.quantity)
+# new_pro.price = -100
+# print(new_pro.price)
 
+
+
+# Create a NonStockedProduct
+new_NonStockedProduct = NonStockedProduct('new_NonStockedProduct', 50)
+
+# Compare PRICES
+print(new_pro < new_NonStockedProduct)
 
 
 # # Buy products
 # print(new_pro.buy(200))
 
-# # Create a NonStockedProduct
-# new_NonStockedProduct = NonStockedProduct('new_NonStockedProduct', 100)
 
 # Create promotion
 # new_promo_percent_discount = promotions.PercentDiscount('30 % OFF', 30)

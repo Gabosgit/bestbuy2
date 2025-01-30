@@ -12,7 +12,7 @@ class Product:
         try:
             self.name = name
             self.price = price
-            self.quantity = quantity
+            self._quantity = quantity
             self.active = True
 
             if name == "":
@@ -27,16 +27,18 @@ class Product:
         except TypeError:
             print("Type value is invalid")
 
-    def get_quantity(self):
+    @property
+    def quantity(self):
         """ Return the quantity of a product """
-        return self.quantity
+        return self._quantity
 
-    def set_quantity(self, quantity):
+    @quantity.setter
+    def quantity(self, quantity):
         """ Sets the available quantity of a product
-            If the Quantity is 0, it deactivates the product
-        """
+                    If the Quantity is 0, it deactivates the product
+                """
         try:
-            self.quantity = int(quantity)
+            self._quantity = int(quantity)
         except ValueError:
             print("Quantity have to be an integer")
         if quantity == 0:
@@ -87,7 +89,6 @@ class Product:
         else:
             # Update Quantity
             self.quantity -= buy_quantity
-            self.set_quantity(self.quantity)
             # Update final price by promotion
             final_price = self.get_price_by_promotion(buy_quantity)
             return final_price
@@ -143,8 +144,12 @@ class LimitedProduct(Product):
 
 
 # # Create product
-# new_pro = Product("prod_with_promo", 100, 100)
-#
+new_pro = Product("prod_with_promo", 100, 100)
+#new_pro.quantity = 200
+#print(new_pro.quantity)
+
+
+
 # # Buy products
 # print(new_pro.buy(200))
 

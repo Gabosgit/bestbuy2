@@ -1,7 +1,6 @@
 """ This module manages product attributes.
     It allows to calculate the total price for a given quantity of the product.
 """
-
 import promotions
 
 
@@ -11,7 +10,7 @@ class Product:
         self._promotion = None
         try:
             self.name = name
-            self.price = price
+            self._price = price
             self._quantity = quantity
             self.active = True
 
@@ -27,10 +26,30 @@ class Product:
         except TypeError:
             print("Type value is invalid")
 
+
+    @property
+    def price(self):
+        """ Return the price of a product """
+        return self._price
+
+
+    @price.setter
+    def price(self, price):
+        """
+            Sets the price of a product"
+            If the price is negative raise an error
+        """
+        if price < 0:
+            raise Exception("The price can't be negative")
+        else:
+            self._price = price
+
+
     @property
     def quantity(self):
         """ Return the quantity of a product """
         return self._quantity
+
 
     @quantity.setter
     def quantity(self, quantity):
@@ -44,17 +63,21 @@ class Product:
         if self._quantity == 0:
             self.deactivate()
 
+
     def is_active(self):
         """ Returns True or False depending on whether the product is active or not. """
         return self.active
+
 
     def activate(self):
         """ Activate the product """
         self.active = True
 
+
     def deactivate(self):
         """ Deactivate the product """
         self.active = False
+
 
     def get_price_by_promotion(self, buy_quantity):
         """ Update the final price according to the promotion applied. """
@@ -72,6 +95,7 @@ class Product:
 
         final_price = self.price * buy_quantity
         return final_price
+
 
     def buy(self, buy_quantity):
         """ Returns the total price for a given quantity of a product
@@ -93,19 +117,23 @@ class Product:
             final_price = self.get_price_by_promotion(buy_quantity)
             return final_price
 
+
     @property
     def promotion(self):
         """ Return the applied promotion of a product """
         return self._promotion
+
 
     @promotion.setter
     def promotion(self, promo):
         """ Sets a promotion to the product by promo name """
         self._promotion = promo
 
+
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
         return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+
 
     def __lt__(self, other):
         return self.price < other.price
@@ -113,6 +141,7 @@ class Product:
         #     return f"\nThe price of {self.name} ({self.price}) is lower that the price of {other.name} ({other.price})\n"
         # else:
         #     return f"\nThe price of {other.name} ({other.price}) is lower that the price of {self.name} ({self.price})\n"
+
 
     def __gt__(self, other):
         return self.price > other.price
@@ -126,10 +155,12 @@ class NonStockedProduct(Product):
     def __init__(self, name, price):
         super().__init__(name, price, quantity=0)
 
+
     def buy(self, buy_quantity):
         # Update final price by promotion
         final_price = self.get_price_by_promotion(buy_quantity)
         return final_price
+
 
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
@@ -140,6 +171,7 @@ class LimitedProduct(Product):
     def __init__(self, name, price, quantity, maximum):
         super().__init__(name, price, quantity)
         self.maximum = maximum
+
 
     def buy(self, buy_quantity):
         super().buy(buy_quantity)
@@ -154,43 +186,8 @@ class LimitedProduct(Product):
             final_price = self.get_price_by_promotion(buy_quantity)
             return final_price
 
+
     def __str__(self):
         """ Returns a string with information about the attributes of a product """
         return f"{self.name}, Price: {self.price}, Limited to {self.maximum} per order!"
-
-
-# # Create product
-new_pro = Product("prod_with_promo", 100, 100)
-#new_pro.quantity = 200
-#print(new_pro.quantity)
-# new_pro.price = -100
-# print(new_pro.price)
-
-
-
-# Create a NonStockedProduct
-new_NonStockedProduct = NonStockedProduct('new_NonStockedProduct', 50)
-
-# Compare PRICES
-print(new_pro < new_NonStockedProduct)
-
-
-# # Buy products
-# print(new_pro.buy(200))
-
-
-# Create promotion
-# new_promo_percent_discount = promotions.PercentDiscount('30 % OFF', 30)
-# new_promo_ThirdOneFree = promotions.ThirdOneFree('3ht free')
-# new_promo_SecondHalfPrice = promotions.SecondHalfPrice('MY Second Halp Price!')
-#
-# Set promotion to products
-#new_pro.set_promotion(new_promo_SecondHalfPrice)
-# new_NonStockedProduct.set_promotion(new_promo_ThirdOneFree)
-#
-
-
-# GET QUANTITY
-#print(prod_with_promo.get_quantity())
-#print(new_NonStockedProduct.buy(1))
 

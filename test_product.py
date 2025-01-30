@@ -1,3 +1,4 @@
+""" PyTest of specific methods and functions """
 import pytest
 import products
 

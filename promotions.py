@@ -1,7 +1,6 @@
 """
     Setup promotions to be applied to products
 """
-
 from abc import ABC, abstractmethod
 
 
@@ -10,10 +9,12 @@ class Promotion(ABC):
     def __init__(self, promo_name):
         self.promo_name = promo_name
 
+
     @abstractmethod
     def apply_promotion(self, product, quantity):
         """ To set up the application of promotions """
         pass
+
 
     def __str__(self):
         return self.promo_name
@@ -23,6 +24,7 @@ class PercentDiscount(Promotion):
     def __init__(self, promo_name, percent):
         super().__init__(promo_name)
         self.percent = percent
+
 
     def apply_promotion(self, product, quantity):
         """ Applies the promotion returning a final price """
@@ -35,6 +37,7 @@ class PercentDiscount(Promotion):
 class ThirdOneFree(Promotion):
     def __init__(self, promo_name):
         super().__init__(promo_name)
+
 
     def apply_promotion(self, product, quantity):
         """ Applies the promotion returning a final price """
@@ -50,6 +53,7 @@ class SecondHalfPrice(Promotion):
     def __init__(self, promo_name):
         super().__init__(promo_name)
 
+
     def apply_promotion(self, product, quantity):
         """ Applies the promotion returning a final price """
         price_prod = product.price
@@ -59,7 +63,3 @@ class SecondHalfPrice(Promotion):
         price_normal = amount_normal_price * price_prod
         final_price = price_applied + price_normal
         return final_price
-
-# # TEST class Promotion
-# new_promotion = PercentDiscount('40% OFF!', 40)
-# print(new_promotion)

@@ -63,6 +63,11 @@ def order_menu(store_name):
         input_order_product = str(input_int("Which product # do you want? ", products_list_length))
         input_order_quantity = input_numeric("What amount do you want? ")
 
+
+        if input_order_product:
+            if not input_order_quantity:
+                continue
+
         if input_order_quantity == "" or input_order_product == "":
             print()
             print(f"Order made! Total payment: {store.order(order_list)}\n")
@@ -93,19 +98,21 @@ def order_menu(store_name):
 
 
 def compare_prices(store_name):
+    """
+        Prompts the user for 2 products
+        Gets the price of these products
+        Compares the prices and return a string with the result
+    """
     store_name.get_all_products()
     length_list = len(store_name.products_list)
     input_prod_a = input_int("Enter the number of product A to compare: ", length_list)
     input_prod_b = input_int("Enter the number of product B to compare: ", length_list)
-    product_a = store_name.products_list[input_prod_a]
-    product_b = store_name.products_list[input_prod_b]
+    product_a = store_name.products_list[input_prod_a-1]
+    product_b = store_name.products_list[input_prod_b-1]
     if product_a < product_b:
         print(f"\nThe price of {product_a.name} ({product_a.price}) is lower that the price of {product_b.name} ({product_b.price})\n")
     else:
         print(f"\nThe price of {product_b.name} ({product_b.price}) is lower that the price of {product_a.name} ({product_a.price})\n")
-
-
-
 
 
 def print_menu():
@@ -116,8 +123,7 @@ def print_menu():
           "2. Show total amount in store\n"
           "3. Make an order\n"
           "4. Compare product prices\n"
-          "5. Check product availability\n"
-          "6. Quit")
+          "5. Quit")
 
 
 def start(best_buy):
@@ -126,8 +132,7 @@ def start(best_buy):
         '1': best_buy.get_all_products,
         '2': best_buy.get_total_quantity,
         '3': order_menu,
-        '4': compare_prices,
-        '5': product_availability
+        '4': compare_prices
     }
     while True:
         print_menu()
@@ -141,6 +146,8 @@ def start(best_buy):
             order_menu(best_buy)
         elif input_menu_option == 4:
             compare_prices(best_buy)
+        # elif input_menu_option == 5:
+        #     product_exist(best_buy)
         else:
             options_menu[str(input_menu_option)]()
 

@@ -16,6 +16,15 @@ class Store:
             self.products_list = products_list
 
 
+    def __contains__(self, product):
+        return product in self.products_list
+
+
+    def __add__(self, other):
+        sum_lists = self.products_list + other.products_list
+        return Store(sum_lists)
+
+
     def add_product(self, prod):
         """ Allows to add a product to the product list """
         try:
@@ -73,34 +82,3 @@ def order(shopping_list):
         total_product_price = product.buy(quantity) # Product price * quantity
         total_order = total_order + total_product_price # Result of all products purchased
     return total_order
-
-
-def main():
-    """
-        Main function to use store.py as module (?)
-    """
-    pass
-
-# # # TEST
-# my_store = Store([])
-# my_product = products.Product('new_product', 100, 100)
-# my_store.add_product(my_product)
-#
-# my_limited_product = products.LimitedProduct('new_limited_prod', 99, 100, 1)
-# my_store.add_product(my_limited_product)
-# #create a promotion
-# thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
-# #Set promotion
-# my_limited_product.promotion = thirty_percent
-# print(my_limited_product.promotion)
-
-
-#TEST - Buy a NonStockedProduct
-# my_NonStockedProduct = products.NonStockedProduct('new_limited_prod', 50)
-# my_store = Store([])
-# my_store.add_product(my_NonStockedProduct)
-# my_store.get_all_products()
-# print(my_NonStockedProduct.buy(2))
-
-if __name__ == '__main__':
-    main()
